@@ -14,7 +14,7 @@ var session      = require('express-session');
 
 var db = require('./config/database.js');
 
-// require('./config/passport')(passport); // pass passport for configuration
+require('./config/passport')(passport); // pass passport for configuration
 
 // set up our express application
 app.use(morgan('dev')); // log every request to the console
