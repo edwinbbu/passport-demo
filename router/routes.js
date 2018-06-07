@@ -1,10 +1,9 @@
 var express = require('express')
 var router = express.Router();
 var passport = require('passport');
+require('../config/passport') // pass passport for configuration
 
-// =====================================
 // HOME PAGE (with login links) ========
-// =====================================
 router.route('/')
     .get(function (req, res) {
         res.render('index.ejs'); // load the index.ejs file
@@ -19,8 +18,12 @@ router.route('/login')
 
         // render the page and pass in any flash data if it exists
         res.render('login.ejs', { message: req.flash('loginMessage') });
-    });
-
+    })
+    .post(passport.authenticate('local-login', {
+        successRedirect : '/profile', // redirect to the secure profile section
+        failureRedirect : '/login', // redirect back to the signup page if there is an error
+        failureFlash : true // allow flash messages
+    }));
 // process the login form
 // app.post('/login', do all our passport stuff here);
 
@@ -30,10 +33,14 @@ router.route('/login')
 // show the signup form
 router.route('/signup')
     .get(function (req, res) {
-
         // render the page and pass in any flash data if it exists
         res.render('signup.ejs', { message: req.flash('signupMessage') });
-    });
+    })
+   .post(passport.authenticate('local-signup', {
+        successRedirect : '/profile', // redirect to the secure profile section
+        failureRedirect : '/signup', // redirect back to the signup page if there is an error
+        failureFlash : true // allow flash messages
+    }));
 // process the signup form
 // app.post('/signup', do all our passport stuff here);
 
@@ -61,11 +68,11 @@ router.route('/logout')
 
 // route middleware to make sure a user is logged in
 function isLoggedIn(req, res, next) {
-
     // if user is authenticated in the session, carry on 
     if (req.isAuthenticated())
         return next();
-
     // if they aren't redirect them to the home page
     res.redirect('/');
 }
+
+module.exports=router;
