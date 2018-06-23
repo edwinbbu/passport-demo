@@ -1,6 +1,11 @@
 {
   "name": "passport",
   "main": "app.js",
+  "keywords": [
+    "passport",
+    "authentication",
+    "ejs",
+  ],
   "dependencies": {
     "bcrypt-nodejs": "latest",
     "body-parser": "~1.15.2",
